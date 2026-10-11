@@ -1,7 +1,9 @@
+from decimal import Decimal
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.utils import timezone
-# Create your models here.
+
 
 class Expedition(models.Model):
     class Statut(models.TextChoices):
@@ -11,13 +13,23 @@ class Expedition(models.Model):
         LIVREE = 'livree', 'Livrée'
         ANNULEE = 'annulee', 'Annulée'
 
-    reference = models.CharField(max_length=20, unique=True)
-    ville_depart = models.CharField(max_length=100)
-    ville_arrivee = models.CharField(max_length=100)
+    reference = models.CharField(max_length=20, unique=True, blank=True)
+    ville_depart = models.CharField(max_length=100, default='')
+    ville_arrivee = models.CharField(max_length=100, default='')
     date_souhaitee = models.DateField(null=True, blank=True)
-    description = models.TextField(blank=True)
-    poids_kg = models.DecimalField(max_digits=10, decimal_places=2)
-    statut = models.CharField(max_length=10, choices=Statut.choices, default=Statut.PUBLIEE)
+    description = models.TextField(blank=True, default='')
+    poids_kg = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal('0.01'), message="Le poids doit être strictement supérieur à 0.")
+        ]
+    )
+    statut = models.CharField(
+        max_length=10,
+        choices=Statut.choices,
+        default=Statut.PUBLIEE
+    )
     entreprise = models.ForeignKey(
         'EntreprisesApp.Entreprise',
         on_delete=models.CASCADE,
@@ -27,26 +39,40 @@ class Expedition(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def clean(self):
-        super().clean()
-        if self.entreprise_id and self.entreprise.type_entreprise != 'chargeur':
-            raise ValidationError("L'entreprise doit être de type chargeur")
-    
     @classmethod
     def _generate_reference(cls):
-        annee = timezone.now().strftime('%Y')
-
-        dernier = cls.objects.filter(reference__startswith=f"EXP_{annee}_").order_by('-reference').first()
-
-
-        compteur = int(dernier.reference[-5:]) + 1 if dernier else 1
+        annee = timezone.now().strftime('%y')
+        prefix = f"EXP-{annee}-"
+        dernier = cls.objects.filter(reference__startswith=prefix).order_by('-reference').first()
+        if dernier:
+            try:
+                compteur = int(dernier.reference.split('-')[-1]) + 1
+            except (ValueError, IndexError):
+                compteur = 1
+        else:
+            compteur = 1
 
         if compteur > 99999:
-            raise ValidationError("Limite dépassée")
+            raise ValidationError("Limite séquentielle annuelle d'expéditions atteinte (99999).")
 
-        return f"EXP_{annee}_{compteur:05d}"
+        return f"{prefix}{compteur:05d}"
 
-        
-        
+    def clean(self):
+        super().clean()
+        if not self.ville_depart:
+            raise ValidationError({'ville_depart': "La ville de départ est obligatoire."})
+        if not self.ville_arrivee:
+            raise ValidationError({'ville_arrivee': "La ville d'arrivée est obligatoire."})
+        if self.poids_kg is not None and self.poids_kg <= Decimal('0'):
+            raise ValidationError({'poids_kg': "Le poids doit être strictement supérieur à 0."})
+        if self.entreprise_id and self.entreprise.type_entreprise != 'chargeur':
+            raise ValidationError({'entreprise': "L'entreprise associée à l'expédition doit être de type chargeur."})
 
-    
+    def save(self, *args, **kwargs):
+        if not self.reference:
+            self.reference = self._generate_reference()
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.reference} ({self.ville_depart} -> {self.ville_arrivee})"

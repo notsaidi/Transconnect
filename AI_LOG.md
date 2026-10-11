@@ -59,19 +59,3 @@
 
 ---
 
-## Entrée [2026-10-04] — Modélisation et Résolution des Dépendances
-
-- **Outil IA utilisé** : Assistant IA
-- **Prompt** : 
-  > "Valider et corriger les relations ForeignKey et la syntaxe entre les applications EntreprisesApp, VehiculesApp, ExpeditionsApp et OffresApp."
-
-- **Sortie obtenue (résumé)** :
-  > Détection et correction des erreurs d'indentation dans les `TextChoices`, correction des chaînes ForeignKey pour pointer vers les bonnes applications (`ExpeditionsApp.Expedition`, `VehiculesApp.Vehicule`, `EntreprisesApp.Entreprise`), et ajout des arguments `max_digits` et `decimal_places` sur les `DecimalField`.
-
-- **Écarts identifiés vs cahier des charges** :
-  - Mauvaise cible de ForeignKey (`EntreprisesApp.Expedition` au lieu de `ExpeditionsApp.Expedition`).
-  - Indentation non alignée dans les classes d'énumération `Statut`.
-
-- **Correction apportée et justification** :
-  - Référencement explicite au format `"<NomApplication>.<NomModele>"` pour découpler et fiabiliser les relations inter-applications.
-  - Normalisation de l'indentation à 4 espaces pour respecter les standards PEP 8 et la syntaxe Python.
