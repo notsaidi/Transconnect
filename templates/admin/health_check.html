@@ -1,0 +1,310 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:health_check' %}">Contrôle d'intégrité</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+    .hc-dashboard {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: #1e293b;
+        margin-top: 10px;
+    }
+    .hc-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .hc-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .hc-card-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    .hc-card-value {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .hc-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .hc-badge-success {
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+    }
+    .hc-badge-danger {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+    .hc-section {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .hc-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .hc-section-header h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: #0f172a;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .hc-section-body {
+        padding: 20px;
+    }
+    .hc-info-box {
+        background: #f1f5f9;
+        border-left: 4px solid #3b82f6;
+        padding: 12px 16px;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 16px;
+        font-size: 0.9rem;
+    }
+    .hc-info-box p {
+        margin: 4px 0;
+    }
+    .hc-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 0.9rem;
+    }
+    .hc-table th {
+        background: #f1f5f9;
+        color: #475569;
+        text-align: left;
+        padding: 10px 14px;
+        font-weight: 600;
+        border-bottom: 2px solid #cbd5e1;
+    }
+    .hc-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #334155;
+    }
+    .hc-table tr:hover td {
+        background: #f8fafc;
+    }
+</style>
+
+<div class="hc-dashboard">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+            <h1 style="margin: 0; font-size: 1.6rem; color: #0f172a;">Tableau de bord de contrôle d'intégrité</h1>
+            <p style="margin: 4px 0 0; color: #64748b; font-size: 0.95rem;">
+                Surveillance continue des règles métier TransConnect — Diagnostic du {{ date_analyse|date:"d/m/Y H:i:s" }}
+            </p>
+        </div>
+        <a href="{% url 'admin:health_check' %}" class="button" style="padding: 8px 16px; font-weight: 600;">
+            🔄 Ré-analyser les données
+        </a>
+    </div>
+
+    <!-- Métriques globales -->
+    <div class="hc-metrics">
+        <div class="hc-card">
+            <div class="hc-card-title">Contrôles exécutés</div>
+            <div class="hc-card-value" style="color: #2563eb;">{{ controles|length }}</div>
+        </div>
+        <div class="hc-card">
+            <div class="hc-card-title">Contrôles conformes</div>
+            <div class="hc-card-value" style="color: #16a34a;">{{ controles_valides }}</div>
+        </div>
+        <div class="hc-card">
+            <div class="hc-card-title">Anomalies totales</div>
+            <div class="hc-card-value" style="color: {% if total_anomalies > 0 %}#dc2626{% else %}#16a34a{% endif %};">
+                {{ total_anomalies }}
+            </div>
+        </div>
+        <div class="hc-card">
+            <div class="hc-card-title">État du système</div>
+            <div style="margin-top: 8px;">
+                {% if total_anomalies == 0 %}
+                    <span class="hc-badge hc-badge-success">Intègre (0 anomalie)</span>
+                {% else %}
+                    <span class="hc-badge hc-badge-danger">Action requise ({{ controles_en_echec }} en échec)</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des contrôles d'intégrité -->
+    {% for c in controles %}
+    <div class="hc-section">
+        <div class="hc-section-header">
+            <h2>
+                <span>Contrôle #{{ c.id }} :</span> {{ c.titre }}
+            </h2>
+            {% if c.count == 0 %}
+                <span class="hc-badge hc-badge-success">✓ Conforme (0 anomalie)</span>
+            {% else %}
+                <span class="hc-badge hc-badge-danger">⚠️ {{ c.count }} anomalie{{ c.count|pluralize }} détectée{{ c.count|pluralize }}</span>
+            {% endif %}
+        </div>
+        <div class="hc-section-body">
+            <div class="hc-info-box">
+                <p><strong>🎯 Règle métier protégée :</strong> {{ c.regle }}</p>
+                <p><strong>⚠️ Scénario de corruption (production) :</strong> {{ c.scenario }}</p>
+            </div>
+
+            {% if c.count == 0 %}
+                <p style="color: #16a34a; font-weight: 500; margin: 8px 0;">
+                    ✓ Aucun enregistrement en violation détecté sur la base de données.
+                </p>
+            {% else %}
+                <!-- Affichage spécifique par type de contrôle -->
+                {% if c.type == 'offres_orphelines' %}
+                    <table class="hc-table">
+                        <thead>
+                            <tr>
+                                <th>Offre ID</th>
+                                <th>Expédition (Réf)</th>
+                                <th>Statut Expédition</th>
+                                <th>Transporteur</th>
+                                <th>Prix</th>
+                                <th>Statut Offre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in c.items %}
+                            <tr>
+                                <td><strong>#{{ item.id }}</strong></td>
+                                <td>{{ item.expedition.reference }}</td>
+                                <td><span style="color: #dc2626; font-weight: 600;">{{ item.expedition.get_statut_display }}</span></td>
+                                <td>{{ item.transporteur.raison_sociale }}</td>
+                                <td>{{ item.prix }} TND</td>
+                                <td>{{ item.get_statut_display }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                {% elif c.type == 'expeditions_bloquees' %}
+                    <table class="hc-table">
+                        <thead>
+                            <tr>
+                                <th>Référence</th>
+                                <th>Chargeur</th>
+                                <th>Trajet</th>
+                                <th>Date Création</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in c.items %}
+                            <tr>
+                                <td><strong>{{ item.reference }}</strong></td>
+                                <td>{{ item.entreprise.raison_sociale }}</td>
+                                <td>{{ item.ville_depart }} &rarr; {{ item.ville_arrivee }}</td>
+                                <td>{{ item.created_at|date:"d/m/Y H:i" }}</td>
+                                <td>{{ item.get_statut_display }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                {% elif c.type == 'transporteurs_sans_flotte' %}
+                    <table class="hc-table">
+                        <thead>
+                            <tr>
+                                <th>Raison Sociale</th>
+                                <th>Matricule Fiscal</th>
+                                <th>Gérant</th>
+                                <th>Véhicules déclarés</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in c.items %}
+                            <tr>
+                                <td><strong>{{ item.raison_sociale }}</strong></td>
+                                <td>{{ item.matricule_fiscal }}</td>
+                                <td>{{ item.gerant.username }}</td>
+                                <td><span style="color: #dc2626; font-weight: 700;">0 véhicule</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                {% elif c.type == 'vehicules_incoherents' %}
+                    <table class="hc-table">
+                        <thead>
+                            <tr>
+                                <th>Immatriculation</th>
+                                <th>Type</th>
+                                <th>Transporteur</th>
+                                <th>État 'disponible'</th>
+                                <th>Offres Acceptées</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in c.items %}
+                            <tr>
+                                <td><strong>{{ item.immatriculation }}</strong></td>
+                                <td>{{ item.get_type_vehicule_display }}</td>
+                                <td>{{ item.entreprise.raison_sociale }}</td>
+                                <td><span style="color: #16a34a; font-weight: 600;">True (Libre)</span></td>
+                                <td><span style="color: #dc2626; font-weight: 600;">Assigné à une offre acceptée</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                {% elif c.type == 'doublons_propositions' %}
+                    <table class="hc-table">
+                        <thead>
+                            <tr>
+                                <th>Expédition (Réf)</th>
+                                <th>Transporteur</th>
+                                <th>Offres au statut 'proposée'</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in c.items %}
+                            <tr>
+                                <td><strong>{{ item.expedition__reference }}</strong></td>
+                                <td>{{ item.transporteur__raison_sociale }}</td>
+                                <td><span style="color: #dc2626; font-weight: 700;">{{ item.nb_offres }} offres simultanées</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

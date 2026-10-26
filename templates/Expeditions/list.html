@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Expéditions</title>
+</head>
+
+<body>
+    <h1>Liste des Expéditions</h1>
+    <ul>
+        {% for expedition in list %}
+        <li style="margin-bottom: 12px;">
+            <strong>Référence :</strong>
+            <!-- CLICK HERE TO OPEN DETAIL -->
+            <a href="{% url 'detail' expedition.pk %}" style="font-weight: bold; font-size: 1.05rem;">
+                {{ expedition.reference }}
+            </a> |
+            <a href="{% url 'detail' expedition.pk %}">Voir détails &rarr;</a>
+        </li>
+        {% empty %}
+        <li>Aucune expédition trouvée.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
