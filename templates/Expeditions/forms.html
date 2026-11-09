@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {%if object %}
+        Modifier Expédition
+        {%else%}
+        Nouvelle Expédition
+        {%endif%}
+
+    </title>
+</head>
+
+<body>
+    {%if object %}
+    Modifier Expédition
+    {%else%}
+    Nouvelle Expédition
+    {%endif%}
+    <h1>
+        {% if object %}
+            Modifier l'expédition {{ object.reference }}
+        {% else %}
+            Créer une nouvelle expédition
+        {% endif %}
+    </h1>
+
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">✅ Enregistrer</button>
+    </form>
+
+    <a href="{% url 'list' %}">&larr; Retour à la liste</a>
+</body>
+
+</html>

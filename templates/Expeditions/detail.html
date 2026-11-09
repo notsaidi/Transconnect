@@ -18,6 +18,12 @@
 
     <hr>
     <p><a href="{% url 'list' %}">&larr; Retour à la liste</a></p>
+
+    <!-- Edit button -->
+    <a href="{% url 'modifier' expedition.pk %}">✏️ Modifier cette expédition</a>
+    &nbsp;|&nbsp;
+    <!-- GET request → goes to supprimer_confirm.html -->
+    <a href="{% url 'supprimer' expedition.pk %}">🗑️ Supprimer cette expédition</a>
 </body>
 
 </html>

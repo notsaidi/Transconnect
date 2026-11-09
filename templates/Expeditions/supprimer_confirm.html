@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmer la suppression</title>
+</head>
+
+<body>
+    <h1>⚠️ Confirmer la suppression</h1>
+
+    <p>Êtes-vous sûr de vouloir supprimer l'expédition <strong>{{ expedition.reference }}</strong> ?</p>
+    <p><strong>Départ :</strong> {{ expedition.ville_depart }}</p>
+    <p><strong>Arrivée :</strong> {{ expedition.ville_arrivee }}</p>
+    <p><strong>Statut :</strong> {{ expedition.get_statut_display }}</p>
+
+    <p>Cette action est <strong>irréversible</strong>.</p>
+
+    <hr>
+
+    <!-- POST → confirms deletion -->
+    <form method="POST" action="{% url 'supprimer' expedition.pk %}">
+        {% csrf_token %}
+        <button type="submit">✅ Oui, supprimer définitivement</button>
+    </form>
+
+    <!-- Link back → cancels, no deletion -->
+    <a href="{% url 'detail' expedition.pk %}">❌ Annuler</a>
+
+</body>
+
+</html>

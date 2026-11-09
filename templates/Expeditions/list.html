@@ -9,6 +9,7 @@
 
 <body>
     <h1>Liste des Expéditions</h1>
+    <a href="{% url 'createexpedition' %}">➕ Ajouter une expédition</a>
     <ul>
         {% for expedition in list %}
         <li style="margin-bottom: 12px;">
