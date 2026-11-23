@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Liste des Véhicules{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/VehiculesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h1>🚛 Liste des Véhicules</h1>
+        <a href="{% url 'vehicule_ajouter' %}" class="btn btn-vehicule">➕ Ajouter un véhicule</a>
+    </div>
+
+    <ul class="vehicule-list">
+        {% for vehicule in list %}
+        <li class="vehicule-card">
+            <div>
+                <strong style="font-size: 1.05rem;">{{ vehicule.immatriculation }}</strong>
+                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    {{ vehicule.get_type_vehicule_display }} • Capacité: {{ vehicule.capacite_kg }} kg • {{ vehicule.entreprise.raison_sociale }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                {% if vehicule.disponible %}
+                    <span class="badge-dispo">Disponible</span>
+                {% else %}
+                    <span class="badge-indispo">Indisponible</span>
+                {% endif %}
+                <a href="{% url 'vehicule_detail' vehicule.pk %}" class="btn btn-secondary">Voir &rarr;</a>
+            </div>
+        </li>
+        {% empty %}
+        <li style="text-align: center; color: var(--text-muted); padding: 2rem;">Aucun véhicule trouvé.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

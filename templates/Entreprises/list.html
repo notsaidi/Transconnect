@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Liste des Entreprises{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h1>🏢 Liste des Entreprises</h1>
+        <a href="{% url 'entreprise_ajouter' %}" class="btn btn-entreprise">➕ Ajouter une entreprise</a>
+    </div>
+
+    <ul class="entreprise-list">
+        {% for entreprise in list %}
+        <li class="entreprise-card">
+            <div>
+                <strong style="font-size: 1.05rem;">{{ entreprise.raison_sociale }}</strong>
+                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    Matricule: {{ entreprise.matricule_fiscal }} • Gérant: {{ entreprise.gerant.username }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <span class="type-pill">{{ entreprise.get_type_entreprise_display }}</span>
+                <a href="{% url 'entreprise_detail' entreprise.pk %}" class="btn btn-secondary">Voir &rarr;</a>
+            </div>
+        </li>
+        {% empty %}
+        <li style="text-align: center; color: var(--text-muted); padding: 2rem;">Aucune entreprise trouvée.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

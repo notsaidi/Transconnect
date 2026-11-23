@@ -1,25 +1,15 @@
-<!DOCTYPE html>
-<html lang="fr">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {%if object %}
-        Modifier Expédition
-        {%else%}
-        Nouvelle Expédition
-        {%endif%}
+{% block title %}
+    {% if object %}Modifier Expédition{% else %}Nouvelle Expédition{% endif %}
+{% endblock %}
 
-    </title>
-</head>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ExpeditionsApp/style.css' %}">
+{% endblock %}
 
-<body>
-    {%if object %}
-    Modifier Expédition
-    {%else%}
-    Nouvelle Expédition
-    {%endif%}
+{% block content %}
     <h1>
         {% if object %}
             Modifier l'expédition {{ object.reference }}
@@ -28,14 +18,12 @@
         {% endif %}
     </h1>
 
-
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">✅ Enregistrer</button>
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <button type="submit" class="btn btn-expedition">✅ Enregistrer</button>
+            <a href="{% url 'list' %}" class="btn btn-secondary">&larr; Annuler</a>
+        </div>
     </form>
-
-    <a href="{% url 'list' %}">&larr; Retour à la liste</a>
-</body>
-
-</html>
+{% endblock %}

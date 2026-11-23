@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Modifier{% else %}Ajouter{% endif %} une entreprise{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{% if object %}Modifier l'entreprise {{ object.raison_sociale }}{% else %}Ajouter une entreprise{% endif %}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <button type="submit" class="btn btn-entreprise">✅ Enregistrer</button>
+            <a href="{% url 'entreprises_list' %}" class="btn btn-secondary">&larr; Annuler</a>
+        </div>
+    </form>
+{% endblock %}

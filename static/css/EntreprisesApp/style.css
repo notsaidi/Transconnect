@@ -1,0 +1,57 @@
+/* EntreprisesApp UI-MAX Theme */
+:root {
+    --app-color: #4f46e5;
+    --app-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --app-light: #eef2ff;
+    --app-border: #c7d2fe;
+}
+
+.main-container {
+    border-top: 5px solid var(--app-color);
+}
+
+.btn-entreprise {
+    background: var(--app-gradient) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28) !important;
+}
+
+.btn-entreprise:hover {
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.entreprise-list {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 1.5rem;
+}
+
+.entreprise-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.entreprise-card:hover {
+    border-color: var(--app-border);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    background: #fcfcff;
+}
+
+.type-pill {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: capitalize;
+}

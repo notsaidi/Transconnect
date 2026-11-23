@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Détail {{ entreprise.raison_sociale }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Entreprise : {{ entreprise.raison_sociale }}</h1>
+
+    <div style="margin: 1.5rem 0; padding: 1.5rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <p><strong>Type :</strong> <span class="type-pill">{{ entreprise.get_type_entreprise_display }}</span></p>
+        <p><strong>Matricule fiscal :</strong> {{ entreprise.matricule_fiscal }}</p>
+        <p><strong>Adresse :</strong> {{ entreprise.adresse }}</p>
+        <p><strong>Gérant :</strong> {{ entreprise.gerant.username }} ({{ entreprise.gerant.email }})</p>
+    </div>
+
+    <hr>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <a href="{% url 'entreprises_list' %}" class="btn btn-secondary">&larr; Retour à la liste</a>
+        {% if user.is_authenticated and user == entreprise.gerant or user.is_staff or user.is_superuser %}
+            <a href="{% url 'entreprise_modifier' entreprise.pk %}" class="btn btn-entreprise">✏️ Modifier</a>
+            <a href="{% url 'entreprise_supprimer' entreprise.pk %}" class="btn btn-danger">🗑️ Supprimer</a>
+        {% endif %}
+    </div>
+{% endblock %}

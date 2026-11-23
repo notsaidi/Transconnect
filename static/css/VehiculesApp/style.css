@@ -1,0 +1,65 @@
+/* VehiculesApp UI-MAX Theme */
+:root {
+    --app-color: #d97706;
+    --app-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --app-light: #fffbeb;
+    --app-border: #fde68a;
+}
+
+.main-container {
+    border-top: 5px solid var(--app-color);
+}
+
+.btn-vehicule {
+    background: var(--app-gradient) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.28) !important;
+}
+
+.btn-vehicule:hover {
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.vehicule-list {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 1.5rem;
+}
+
+.vehicule-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.vehicule-card:hover {
+    border-color: var(--app-border);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    background: #fffdfa;
+}
+
+.badge-dispo {
+    background-color: var(--status-success-bg);
+    color: var(--status-success-text);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.badge-indispo {
+    background-color: var(--status-danger-bg);
+    color: var(--status-danger-text);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 700;
+}

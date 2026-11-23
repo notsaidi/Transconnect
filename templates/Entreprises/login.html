@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Connexion — TransConnect{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>🔐 Connexion TransConnect</h1>
+
+    {% if form.errors %}
+        <p style="color: var(--danger); font-weight: 500; margin-bottom: 1rem;">Nom d'utilisateur ou mot de passe incorrect. Veuillez réessayer.</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; align-items: center;">
+            <button type="submit" class="btn btn-entreprise" style="flex: 1; justify-content: center;">Se connecter</button>
+            <a href="{% url 'inscription' %}" class="btn btn-secondary">Créer un compte</a>
+        </div>
+    </form>
+{% endblock %}

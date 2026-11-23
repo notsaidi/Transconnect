@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Détail Offre #{{ offre.pk }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/OffresApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Détail Offre #{{ offre.pk }}</h1>
+
+    <div style="margin: 1.5rem 0; padding: 1.5rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <p><strong>Expédition ciblée :</strong> {{ offre.expedition.reference }}</p>
+        <p><strong>Transporteur :</strong> {{ offre.transporteur.raison_sociale }}</p>
+        <p><strong>Véhicule assigné :</strong> {{ offre.vehicule.immatriculation }}</p>
+        <p><strong>Prix proposé :</strong> <span class="price-tag">{{ offre.prix }} TND</span></p>
+        <p><strong>Délai estimé :</strong> {{ offre.delai_jours }} jour(s)</p>
+        <p><strong>Statut :</strong> {{ offre.get_statut_display }}</p>
+        <p><strong>Date de proposition :</strong> {{ offre.date_proposition }}</p>
+    </div>
+
+    <hr>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <a href="{% url 'offres_list' %}" class="btn btn-secondary">&larr; Retour à la liste</a>
+        <a href="{% url 'offre_modifier' offre.pk %}" class="btn btn-offre">✏️ Modifier</a>
+        <a href="{% url 'offre_supprimer' offre.pk %}" class="btn btn-danger">🗑️ Supprimer</a>
+    </div>
+{% endblock %}

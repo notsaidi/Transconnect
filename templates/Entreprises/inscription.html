@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Inscription — TransConnect{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>📝 Créer un compte TransConnect</h1>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+        Rejoignez notre réseau logistique en tant que Chargeur ou Transporteur.
+    </p>
+
+    {% if form.errors %}
+        <div style="padding: 1rem 1.25rem; background: var(--status-danger-bg); border: 1.5px solid #fecaca; border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+            <p style="color: var(--status-danger-text); font-weight: 700; margin-bottom: 0.25rem;">
+                ⚠️ Veuillez corriger l'erreur prioritaire ci-dessous :
+            </p>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p style="color: #991b1b; font-size: 0.92rem; margin: 0;">&bull; <strong>{{ field.label }}</strong> : {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <p style="color: #991b1b; font-size: 0.92rem; margin: 0;">&bull; {{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center;">
+            <button type="submit" class="btn btn-entreprise">S'inscrire</button>
+            <a href="{% url 'login' %}" class="btn btn-secondary">Déjà un compte ? Se connecter</a>
+        </div>
+    </form>
+{% endblock %}

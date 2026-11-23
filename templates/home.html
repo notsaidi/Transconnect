@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil — TransConnect{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; padding: 1.5rem 0 2.5rem 0;">
+        <span class="brand-badge" style="display: inline-block; margin-bottom: 1rem; padding: 0.4rem 1rem; font-size: 0.85rem;">
+            Système Intégré de Fret Routier
+        </span>
+        <h1 style="justify-content: center; font-size: 2.6rem; letter-spacing: -0.04em; margin-bottom: 0.75rem; color: #0f172a;">
+            Bienvenue sur TransConnect 🚚
+        </h1>
+        <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 3rem auto; line-height: 1.65;">
+            L'écosystème numérique unifié pour la gestion d'expéditions, l'allocation de flottes de véhicules et la négociation d'offres de transport en temps réel.
+        </p>
+
+        <!-- UI-MAX Grid System -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; text-align: left;">
+            
+            <!-- Expeditions Card -->
+            <a href="{% url 'list' %}" style="text-decoration: none; padding: 1.75rem; background: #ffffff; border: 1.5px solid #e0f2fe; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); transition: var(--transition-smooth);" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#38bdf8'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='none'; this.style.borderColor='#e0f2fe'; this.style.boxShadow='var(--shadow-sm)';">
+                <div style="width: 52px; height: 52px; background: #e0f2fe; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.25rem;">
+                    📦
+                </div>
+                <h3 style="color: #0284c7; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem;">Expéditions</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">Création, suivi logistique et publication des cargaisons.</p>
+                <div style="margin-top: 1.25rem; font-size: 0.85rem; font-weight: 700; color: #0284c7; display: flex; align-items: center; gap: 0.35rem;">
+                    Accéder au module &rarr;
+                </div>
+            </a>
+
+            <!-- Vehicules Card -->
+            <a href="{% url 'vehicules_list' %}" style="text-decoration: none; padding: 1.75rem; background: #ffffff; border: 1.5px solid #fef3c7; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); transition: var(--transition-smooth);" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#f59e0b'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='none'; this.style.borderColor='#fef3c7'; this.style.boxShadow='var(--shadow-sm)';">
+                <div style="width: 52px; height: 52px; background: #fef3c7; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.25rem;">
+                    🚛
+                </div>
+                <h3 style="color: #d97706; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem;">Véhicules</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">Gestion du parc automobile, capacités de charge et disponibilités.</p>
+                <div style="margin-top: 1.25rem; font-size: 0.85rem; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 0.35rem;">
+                    Accéder au module &rarr;
+                </div>
+            </a>
+
+            <!-- Offres Card -->
+            <a href="{% url 'offres_list' %}" style="text-decoration: none; padding: 1.75rem; background: #ffffff; border: 1.5px solid #d1fae5; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); transition: var(--transition-smooth);" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#10b981'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='none'; this.style.borderColor='#d1fae5'; this.style.boxShadow='var(--shadow-sm)';">
+                <div style="width: 52px; height: 52px; background: #d1fae5; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.25rem;">
+                    📋
+                </div>
+                <h3 style="color: #059669; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem;">Offres</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">Propositions tarifaires, délais de livraison et attribution des lots.</p>
+                <div style="margin-top: 1.25rem; font-size: 0.85rem; font-weight: 700; color: #059669; display: flex; align-items: center; gap: 0.35rem;">
+                    Accéder au module &rarr;
+                </div>
+            </a>
+
+            <!-- Entreprises Card -->
+            <a href="{% url 'entreprises_list' %}" style="text-decoration: none; padding: 1.75rem; background: #ffffff; border: 1.5px solid #e0e7ff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); transition: var(--transition-smooth);" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#6366f1'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='none'; this.style.borderColor='#e0e7ff'; this.style.boxShadow='var(--shadow-sm)';">
+                <div style="width: 52px; height: 52px; background: #e0e7ff; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.25rem;">
+                    🏢
+                </div>
+                <h3 style="color: #4f46e5; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem;">Entreprises</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">Répertoire officiel des chargeurs et entreprises de transport.</p>
+                <div style="margin-top: 1.25rem; font-size: 0.85rem; font-weight: 700; color: #4f46e5; display: flex; align-items: center; gap: 0.35rem;">
+                    Accéder au module &rarr;
+                </div>
+            </a>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Confirmer la suppression{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/OffresApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>⚠️ Supprimer l'offre #{{ offre.pk }} ?</h1>
+    <p>Expédition : <strong>{{ offre.expedition.reference }}</strong></p>
+    <p>Cette action est <strong>irréversible</strong>.</p>
+
+    <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <form method="POST" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">✅ Oui, supprimer</button>
+        </form>
+        <a href="{% url 'offre_detail' offre.pk %}" class="btn btn-secondary">❌ Annuler</a>
+    </div>
+{% endblock %}

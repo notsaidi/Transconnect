@@ -1,0 +1,54 @@
+/* ExpeditionsApp UI-MAX Theme */
+:root {
+    --app-color: #0284c7;
+    --app-gradient: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    --app-light: #f0f9ff;
+    --app-border: #bae6fd;
+}
+
+.main-container {
+    border-top: 5px solid var(--app-color);
+}
+
+.btn-expedition {
+    background: var(--app-gradient) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28) !important;
+}
+
+.btn-expedition:hover {
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.expedition-list {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 1.5rem;
+}
+
+.expedition-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.expedition-card:hover {
+    border-color: var(--app-border);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    background: #fbfdff;
+}
+
+.expedition-ref {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--app-color);
+    letter-spacing: -0.01em;
+}

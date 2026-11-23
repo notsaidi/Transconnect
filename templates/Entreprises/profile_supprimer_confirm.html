@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Supprimer mon compte{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>⚠️ Supprimer mon compte</h1>
+
+    <div style="padding: 1.5rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); margin: 1.5rem 0;">
+        <p style="color: var(--danger); font-weight: 600; font-size: 1.05rem;">
+            Attention {{ user.username }}, cette action est irréversible !
+        </p>
+        <p style="color: #7f1d1d; margin: 0;">
+            La suppression de votre compte effacera vos données personnelles et l'accès à la plateforme TransConnect.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+        <form method="POST" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">✅ Oui, supprimer définitivement mon compte</button>
+        </form>
+        <a href="{% url 'user_profile' %}" class="btn btn-secondary">❌ Annuler</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Confirmer la suppression{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/EntreprisesApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>⚠️ Supprimer l'entreprise {{ entreprise.raison_sociale }} ?</h1>
+    <p>Cette action est <strong>irréversible</strong>.</p>
+
+    <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <form method="POST" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">✅ Oui, supprimer</button>
+        </form>
+        <a href="{% url 'entreprise_detail' entreprise.pk %}" class="btn btn-secondary">❌ Annuler</a>
+    </div>
+{% endblock %}

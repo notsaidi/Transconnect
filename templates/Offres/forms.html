@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Modifier{% else %}Ajouter{% endif %} une offre{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/OffresApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{% if object %}Modifier l'offre #{{ object.pk }}{% else %}Proposer une nouvelle offre{% endif %}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <button type="submit" class="btn btn-offre">✅ Enregistrer</button>
+            <a href="{% url 'offres_list' %}" class="btn btn-secondary">&larr; Annuler</a>
+        </div>
+    </form>
+{% endblock %}

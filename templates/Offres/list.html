@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Liste des Offres{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/OffresApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h1>📋 Liste des Offres</h1>
+        <a href="{% url 'offre_ajouter' %}" class="btn btn-offre">➕ Proposer une offre</a>
+    </div>
+
+    <ul class="offre-list">
+        {% for offre in list %}
+        <li class="offre-card">
+            <div>
+                <strong style="font-size: 1.05rem;">Offre #{{ offre.pk }} &bull; {{ offre.expedition.reference }}</strong>
+                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    Transporteur: {{ offre.transporteur.raison_sociale }} • Véhicule: {{ offre.vehicule.immatriculation }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span class="price-tag">{{ offre.prix }} TND</span>
+                <a href="{% url 'offre_detail' offre.pk %}" class="btn btn-secondary">Voir &rarr;</a>
+            </div>
+        </li>
+        {% empty %}
+        <li style="text-align: center; color: var(--text-muted); padding: 2rem;">Aucune offre trouvée.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,32 +1,23 @@
-<!DOCTYPE html>
-<html lang="fr">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Confirmer la suppression</title>
-</head>
+{% block title %}Confirmer la suppression{% endblock %}
 
-<body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ExpeditionsApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
     <h1>⚠️ Confirmer la suppression</h1>
 
-    <p>Êtes-vous sûr de vouloir supprimer l'expédition <strong>{{ expedition.reference }}</strong> ?</p>
-    <p><strong>Départ :</strong> {{ expedition.ville_depart }}</p>
-    <p><strong>Arrivée :</strong> {{ expedition.ville_arrivee }}</p>
-    <p><strong>Statut :</strong> {{ expedition.get_statut_display }}</p>
-
+    <p>Êtes-vous sûr de vouloir supprimer définitivement l'expédition <strong>{{ expedition.reference }}</strong> ?</p>
     <p>Cette action est <strong>irréversible</strong>.</p>
 
-    <hr>
-
-    <!-- POST → confirms deletion -->
-    <form method="POST" action="{% url 'supprimer' expedition.pk %}">
-        {% csrf_token %}
-        <button type="submit">✅ Oui, supprimer définitivement</button>
-    </form>
-
-    <!-- Link back → cancels, no deletion -->
-    <a href="{% url 'detail' expedition.pk %}">❌ Annuler</a>
-
-</body>
-
-</html>
+    <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+        <form method="POST" action="{% url 'supprimer' expedition.pk %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">✅ Oui, supprimer définitivement</button>
+        </form>
+        <a href="{% url 'detail' expedition.pk %}" class="btn btn-secondary">❌ Annuler</a>
+    </div>
+{% endblock %}

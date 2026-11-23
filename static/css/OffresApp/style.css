@@ -1,0 +1,54 @@
+/* OffresApp UI-MAX Theme */
+:root {
+    --app-color: #059669;
+    --app-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --app-light: #ecfdf5;
+    --app-border: #a7f3d0;
+}
+
+.main-container {
+    border-top: 5px solid var(--app-color);
+}
+
+.btn-offre {
+    background: var(--app-gradient) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28) !important;
+}
+
+.btn-offre:hover {
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.offre-list {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 1.5rem;
+}
+
+.offre-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.offre-card:hover {
+    border-color: var(--app-border);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    background: #fbfefd;
+}
+
+.price-tag {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--app-color);
+    letter-spacing: -0.02em;
+}

@@ -1,29 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Expéditions</title>
-</head>
+{% block title %}Liste des Expéditions{% endblock %}
 
-<body>
-    <h1>Liste des Expéditions</h1>
-    <a href="{% url 'createexpedition' %}">➕ Ajouter une expédition</a>
-    <ul>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ExpeditionsApp/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h1>📦 Liste des Expéditions</h1>
+        <a href="{% url 'createexpedition' %}" class="btn btn-expedition">➕ Ajouter une expédition</a>
+    </div>
+
+    <ul class="expedition-list">
         {% for expedition in list %}
-        <li style="margin-bottom: 12px;">
-            <strong>Référence :</strong>
-            <!-- CLICK HERE TO OPEN DETAIL -->
-            <a href="{% url 'detail' expedition.pk %}" style="font-weight: bold; font-size: 1.05rem;">
-                {{ expedition.reference }}
-            </a> |
-            <a href="{% url 'detail' expedition.pk %}">Voir détails &rarr;</a>
+        <li class="expedition-card">
+            <div>
+                <span class="expedition-ref">{{ expedition.reference }}</span>
+                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    {{ expedition.ville_depart }} &rarr; {{ expedition.ville_arrivee }} • {{ expedition.poids_kg }} kg
+                </p>
+            </div>
+            <div>
+                <a href="{% url 'detail' expedition.pk %}" class="btn btn-secondary">Voir détails &rarr;</a>
+            </div>
         </li>
         {% empty %}
-        <li>Aucune expédition trouvée.</li>
+        <li style="text-align: center; color: var(--text-muted); padding: 2rem;">Aucune expédition trouvée.</li>
         {% endfor %}
     </ul>
-</body>
-
-</html>
+{% endblock %}
